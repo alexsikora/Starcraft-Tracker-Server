@@ -7,10 +7,10 @@ from models import UserProfile
 from django.db import IntegrityError
 
 def create_user(request):
-    username = request.GET['username']
-    password = request.GET['password']
-    #username = request.POST['username']
-    #password = request.POST['password']
+    #username = request.GET['username']
+    #password = request.GET['password']
+    username = request.POST['username']
+    password = request.POST['password']
     try:
         newUser = User.objects.create_user(username, username, password)
         return HttpResponse("Account succesfully created");
@@ -18,8 +18,8 @@ def create_user(request):
         return HttpResponse("Account creation failed");
 
 def authenticate_user(request):
-    name = request.GET['username']
-    passw = request.GET['password']
+    name = request.POST['username']
+    passw = request.POST['password']
     user = authenticate(username=name, password=passw)
     if user is not None:
         if user.is_active:
