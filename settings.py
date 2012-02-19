@@ -11,8 +11,8 @@ MANAGERS = ADMINS
 
 DB_NAME = 'trackerdb'
 
-if 'test' in sys.argv:
-    DB_NAME = 'test_db'
+#if 'test' in sys.argv:
+#    DB_NAME = 'test_db'
 
 DATABASES = {
     'default': {
@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'starcraft_tracker.urls'
+ROOT_URLCONF = 'Starcraft-Tracker-Server.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
