@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^users/register/', 'users.views.create_user'),
     url(r'^users/authenticate/', 'users.views.authenticate_user'),
+    url(r'^users/remove/', 'users.views.remove_user'),
 )
