@@ -29,3 +29,15 @@ def authenticate_user(request):
     else:
         return HttpResponse("Your username or password was invalid")
 
+def remove_user(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            user.delete()
+            return HttpResponse("Succesful account removal")
+        else:
+            return HttpResponse("Your account has been disabled")
+    else:
+        return HttpResponse("Your username or password was invalid")  
