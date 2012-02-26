@@ -7,8 +7,6 @@ from models import UserProfile
 from django.db import IntegrityError
 
 def create_user(request):
-    #username = request.GET['username']
-    #password = request.GET['password']
     username = request.POST['username']
     password = request.POST['password']
     try:
