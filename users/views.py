@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from models import UserProfile
 from django.db import IntegrityError
+from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.csrf.middleware import csrf_exempt
 
 def create_user(request):
     username = request.POST['username']
@@ -16,7 +18,6 @@ def create_user(request):
     except IntegrityError:
         return HttpResponse("Account creation failed");
 
-@csrf_protect
 def authenticate_user(request):
     name = request.POST['username']
     passw = request.POST['password']
@@ -29,7 +30,6 @@ def authenticate_user(request):
     else:
         return HttpResponse("Your username or password was invalid")
 
-@csrf_protect
 def remove_user(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -42,3 +42,7 @@ def remove_user(request):
             return HttpResponse("Your account has been disabled")
     else:
         return HttpResponse("Your username or password was invalid")  
+
+create_user = csrf_exempt(create_user)
+authenticate_user = csrf_exempt(authenticate_user)
+remove_user = csrf_exempt(remove_user)
