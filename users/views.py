@@ -9,6 +9,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.csrf.middleware import csrf_exempt
 import base64
+from django.util import simplejson
 
 def is_auth(request):
     #if (request.user is not AnonymouseUser):
@@ -49,14 +50,15 @@ def authenticate_user(request):
     #passw = request.POST['password']
     #user = authenticate(username=name, password=passw)
     user = is_auth(request)
+    response = {}
     if user is not None:
         if user.is_active:
-            return HttpResponse("Successful authentication")
+            response['response'] = "Successful authentication"
         else:
-            return HttpResponse("Your account has been disabled")
+            response['response'] = "Your account has been disabled"
+        return HttpResponse(simplejson.dumps(response),mimetype="application/json")
     else:
         return auth_required_response()
-        return HttpResponse("Your username or password was invalid")
 
 def remove_user(request):
     username = request.POST['username']
