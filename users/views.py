@@ -2,31 +2,60 @@
 from django.http import HttpResponse
 from django.http import Http404
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from models import UserProfile
 from django.db import IntegrityError
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.csrf.middleware import csrf_exempt
+import base64
+
+def is_auth(request):
+    #if (request.user is not AnonymouseUser):
+    #    return request.user
+
+    user = None
+    if 'HTTP_AUTHORIZATION' in request.META:
+        auth = request.META['HTTP_AUTHORIZATION'].split()
+        if len(auth) == 2:
+            #only basic auth right now
+            if auth[0].lower() == "basic":
+                uname, passwd = base64.b64decode(auth[1]).split(':')
+                user = authenticate(username=uname, password=passwd)
+                if user is not None:
+                    if user.is_active:
+                        login(request,user)
+                        request.user = user
+    return user
+
+def auth_required_response():
+    response = HttpResponse()
+    response.status_code = 401
+    realm = ''
+    response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
+    return response
 
 def create_user(request):
-    #username = request.GET['username']
-    #password = request.GET['password']
     username = request.POST['username']
     password = request.POST['password']
     try:
         newUser = User.objects.create_user(username, username, password)
-        return HttpResponse("Account succesfully created");
+        return HttpResponse("Account successfully created");
     except IntegrityError:
         return HttpResponse("Account creation failed");
 
 def authenticate_user(request):
-    name = request.POST['username']
-    passw = request.POST['password']
-    user = authenticate(username=name, password=passw)
+    #name = request.POST['username']
+    #passw = request.POST['password']
+    #user = authenticate(username=name, password=passw)
+    user = is_auth(request)
     if user is not None:
         if user.is_active:
-            return HttpResponse("Succesful authentication")
+            return HttpResponse("Successful authentication")
         else:
             return HttpResponse("Your account has been disabled")
     else:
+        return auth_required_response()
         return HttpResponse("Your username or password was invalid")
 
 def remove_user(request):
@@ -36,8 +65,12 @@ def remove_user(request):
     if user is not None:
         if user.is_active:
             user.delete()
-            return HttpResponse("Succesful account removal")
+            return HttpResponse("Successful account removal")
         else:
             return HttpResponse("Your account has been disabled")
     else:
         return HttpResponse("Your username or password was invalid")  
+
+create_user = csrf_exempt(create_user)
+authenticate_user = csrf_exempt(authenticate_user)
+remove_user = csrf_exempt(remove_user)

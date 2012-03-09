@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    #('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -103,9 +103,15 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+#AUTHENTICATION_BACKENDS = (
+#    'django.contrib.auth.backends.RemoteUserBackend',
+#)
 
 ROOT_URLCONF = 'Starcraft-Tracker-Server.urls'
 
@@ -123,6 +129,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'piston',
+    'users',
+    'players',
     'users',
     # Uncomment the next line to enable the admin:
     'django.contrib.auth',
