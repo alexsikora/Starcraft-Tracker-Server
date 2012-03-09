@@ -19,7 +19,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class RemoveAccountTest(TestCase):
+class UserTest(TestCase):
 
     username = 'lolwut'
     password = 'lolhai'
@@ -39,3 +39,13 @@ class RemoveAccountTest(TestCase):
         response = self.client.post('/users/remove/',{'username': 'banana', 'password': 'lol'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, "Your username or password was invalid")
+        
+    def testRemoveDisabled(self):
+        self.user = User.objects.create_user('dummy','dummy','test')
+        User.user_permissions.remove(is_active)
+        response = self.client.post('/users/remove/',{'username': 'dummy', 'password': 'test'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, "Your account has been disabled")
+        
+        
+        
