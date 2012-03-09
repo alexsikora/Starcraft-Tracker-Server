@@ -2,6 +2,14 @@ from django.db import models
 
 # Create your models here.
 
+class Team(models.Model):
+    name = models.CharField("team name", max_length=255)
+    tag = models.CharField("team tag", max_length=30)
+    # nevermind, just the top one is necessary players = models.OneToManyField(Player, verbose_name="team's players")
+
+    def __unicode__(self):
+        return self.name + " (" + self.tag + ")"
+    
 class Player(models.Model):
     name = models.CharField("player's real name", max_length=255)
     handle = models.CharField("player's online handle", max_length=255)
@@ -15,12 +23,4 @@ class Player(models.Model):
     def __unicode__(self):
         return self.name + " aka " + self.handle
 
-
-class Team(models.Model):
-    name = models.CharField("team name", max_length=255)
-    tag = models.CharField("team tag", max_length=30)
-    # nevermind, just the top one is necessary players = models.OneToManyField(Player, verbose_name="team's players")
-
-    def __unicode__(self):
-        return self.name + " (" + self.tag + ")"
 
