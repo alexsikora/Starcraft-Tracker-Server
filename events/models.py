@@ -1,5 +1,5 @@
 from django.db import models
-#from players.models import Player, Team
+from players.models import Player, Team
 # Create your models here.
 
 class Event(models.Model):
@@ -22,19 +22,19 @@ class Match(models.Model):
         abstract = True #makes this an abstract class
 
 class PlayerMatch(Match):
-    first_player = models.ForeignKey(players.Player, verbose_name="player 1")
-    second_player = models.ForeignKey(players.Player, verbose_name="player 2")
+    first_player = models.ForeignKey(Player, verbose_name="player 1")
+    second_player = models.ForeignKey(Player, verbose_name="player 2")
 
 class TeamMatch(Match):
-    first_team = models.ForeignKey(players.Team, verbose_name="team 1")
-    second_team = models.ForeignKey(players.Team, verbose_name="team 2")
+    first_team = models.ForeignKey(Team, verbose_name="team 1")
+    second_team = models.ForeignKey(Team, verbose_name="team 2")
 
 class Map(models.Model):
     name = models.CharField("map name", max_length=255)
     image = models.FileField(upload_to="/map_images/")
     
 class Game(models.Model):
-    game_match = models.ForeignKey(Match, verbose_name="match this game is a part of")
+    # game_match = models.ForeignKey(Match, verbose_name="match this game is a part of")
     game_map = models.ForeignKey(Map, verbose_name="map this game is played on", blank=True, null=True)
     description = models.CharField("short description of game", max_length=1000, blank=True, null=True)
     
