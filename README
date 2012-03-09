@@ -1,0 +1,11 @@
+Iteration History:
+V0.2: (Iteration 2 Deliverable)
+User Methods/Tests
+Viewable in users/
+Files:
+models.py
+-The user model
+views.py
+-The user function
+tests.py
+-The user tests
