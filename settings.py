@@ -129,7 +129,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'piston',
-    'users',
+    'events',
     'players',
     'users',
     # Uncomment the next line to enable the admin:
