@@ -9,7 +9,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.csrf.middleware import csrf_exempt
 import base64
-from django.util import simplejson
+from django.utils import simplejson
 
 def is_auth(request):
     #if (request.user is not AnonymouseUser):
