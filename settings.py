@@ -1,4 +1,5 @@
 # Django settings for starcraft_tracker project.
+import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
