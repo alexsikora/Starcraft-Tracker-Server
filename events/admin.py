@@ -8,7 +8,6 @@ from events.models import Game
 from django.contrib import admin
 admin.site.register(Event)
 admin.site.register(Round)
-admin.site.register(Match)
 admin.site.register(PlayerMatch)
 admin.site.register(TeamMatch)
 admin.site.register(Map)

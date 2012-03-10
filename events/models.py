@@ -8,26 +8,35 @@ class Event(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    def __unicode__(self):
+        return self.name
+
 class Round(models.Model):
     event = models.ForeignKey(Event, verbose_name="event the round is in")
     name = models.CharField(max_length=255) #the name of htis round (i.e. RO4)
-
+    
+    def __unicode__(self):
+        return self.event.name + ": " + self.name
 
 
 class Match(models.Model):
-    match_round = models.ForeignKey(Round, verbose_name="round the game is in")
-    winner_next_round = models.ForeignKey(Round, verbose_name="next round for winner of this game")
-    loser_next_round = models.ForeignKey(Round, verbose_name="next round for loser of this game", blank=True, null=True)
+    match_round = models.ForeignKey(Round, verbose_name="round the game is in", related_name="%(app_label)s_%(class)s_related")
+    winner_next_round = models.ForeignKey(Round, verbose_name="next round for winner of this game", related_name="+", blank=True, null=True)
+    loser_next_round = models.ForeignKey(Round, verbose_name="next round for loser of this game", blank=True, null=True, related_name="+")
     class Meta:
         abstract = True #makes this an abstract class
 
 class PlayerMatch(Match):
-    first_player = models.ForeignKey(Player, verbose_name="player 1")
-    second_player = models.ForeignKey(Player, verbose_name="player 2")
+    first_player = models.ForeignKey(Player, verbose_name="player 1",related_name="%(class)s_firstplayer")
+    second_player = models.ForeignKey(Player, verbose_name="player 2", related_name="%(class)s_secondplayer")
+
+    def __unicode__(self):
+        return self.match_round.event.name + " - " + self.match_round.name + ": " + self.first_player.name + " vs. " + self.second_player.name
+
 
 class TeamMatch(Match):
-    first_team = models.ForeignKey(Team, verbose_name="team 1")
-    second_team = models.ForeignKey(Team, verbose_name="team 2")
+    first_team = models.ForeignKey(Team, verbose_name="team 1", related_name="%(class)s_firstteam")
+    second_team = models.ForeignKey(Team, verbose_name="team 2", related_name="%(class)s_secondteam")
 
 class Map(models.Model):
     name = models.CharField("map name", max_length=255)
