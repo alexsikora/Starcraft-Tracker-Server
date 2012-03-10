@@ -38,9 +38,15 @@ class TeamMatch(Match):
     first_team = models.ForeignKey(Team, verbose_name="team 1", related_name="%(class)s_firstteam")
     second_team = models.ForeignKey(Team, verbose_name="team 2", related_name="%(class)s_secondteam")
 
+    def __unicode__(self):
+        return self.match_round.event.name + " - " + self.match_round.name + ": " + self.first_team.name + " vs. " + self.second_team.name
+
 class Map(models.Model):
     name = models.CharField("map name", max_length=255)
-    image = models.FileField(upload_to="/map_images/")
+    image = models.FileField(upload_to="map_images/")
+
+    def __unicode__(self):
+        return self.name
     
 class Game(models.Model):
     # game_match = models.ForeignKey(Match, verbose_name="match this game is a part of")
