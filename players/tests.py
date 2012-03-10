@@ -20,4 +20,92 @@ from django.contrib.auth.models import User
 
 
 class TeamTest(TestCase):
+    
+    username = 'testuser'
+    password = 'testpass'
+    email = 'test@test.com'
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(self.username, self.email, self.password)
+        auth = self.getUserAuth(self.username, self.password)
+        self.extra = {
+            'HTTP_AUTHORIZATION': auth,
+        }
+        
+        newTeam = Team.objects.create(name="Test1", tag="T")
+        newTeam2 = Team.objects.create(name="AnotherTeam", tag="Test")
+        newTeam3 = Team.objects.create(name="TestableTeam", tag="TT")
 
+    def getUserAuth(self, username, password):
+        auth = '%s:%s' % (username, password)
+        auth = 'Basic %s' % base64.encodestring(auth)
+        auth = auth.strip()
+
+        return auth
+        
+    def test_find_all_teams(self):
+        response = self.client.get('/players/allteams/', {}, **self.extra)
+        # self.assertEqual(response.status_code, 200)
+        
+        result = response.content
+        
+        self.failUnless(result)
+        self.assertTrue("Test1" in result)
+        self.assertTrue("AnotherTeam" in result)
+        self.assertTrue("TestableTeam" in result)
+        
+    def test_find_matching_teams_1(self):
+        response = self.client.get('/players/teamquery/?query=t', {}, **self.extra)
+        # self.assertEqual(response.status_code, 200)
+        
+        result = response.content
+        
+        self.failUnless(result)
+        self.assertTrue("Test1" in result)
+        self.assertTrue("AnotherTeam" not in result)
+        self.assertTrue("TestableTeam" in result)
+        
+    def test_find_matching_teams_2(self):
+        response = self.client.get('/players/teamquery/?query=another', {}, **self.extra)
+        # self.assertEqual(response.status_code, 200)
+        
+        result = response.content
+        
+        self.failUnless(result)
+        self.assertTrue("Test1" not in result)
+        self.assertTrue("AnotherTeam" in result)
+        self.assertTrue("TestableTeam" not in result)
+        
+    def test_find_matching_teams_3(self):
+        response = self.client.get('/players/teamquery/?query=TEST', {}, **self.extra)
+        # self.assertEqual(response.status_code, 200)
+        
+        result = response.content
+        
+        self.failUnless(result)
+        self.assertTrue("Test1" in result)
+        self.assertTrue("AnotherTeam" in result)
+        self.assertTrue("TestableTeam" in result)
+        
+    def test_find_matching_teams_4(self):
+        response = self.client.get('/players/teamquery/?query=tT', {}, **self.extra)
+        # self.assertEqual(response.status_code, 200)
+        
+        result = response.content
+        
+        self.failUnless(result)
+        self.assertTrue("Test1" not in result)
+        self.assertTrue("AnotherTeam" not in result)
+        self.assertTrue("TestableTeam" in result)
+        
+    def test_find_matching_teams_5(self):
+        response = self.client.get('/players/teamquery/?query=nope', {}, **self.extra)
+        # self.assertEqual(response.status_code, 200)
+        
+        result = response.content
+        
+        self.failUnless(result)
+        self.assertTrue("Test1" not in result)
+        self.assertTrue("AnotherTeam" not in result)
+        self.assertTrue("TestableTeam" not in result)
