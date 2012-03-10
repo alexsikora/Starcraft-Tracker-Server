@@ -64,3 +64,15 @@ def get_all_players(request):
     response['response'] = all_players
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+def get_matching_players(request):
+    user = is_auth(request)
+    if user is None:
+        return auth_required_response()
+    query = request.GET['query']
+    players = Player.objects.filter(name__istartswith=query) | Player.objects.filter(handle__iexact=query) | Player.objects.filter(team__iexact=query) | Player.objects.filter(race__iexact=query) | Player.objects.filter(elo__iexact=query) | Player.objects.filter(nationality__iexact=query)
+    jsonreturn = serializers.serialize("json", players)
+    playerarray = {}
+    playerarray['response'] = jsonreturn
+    playerarray['status_code'] = 200
+    return HttpResponse(simplejson.dumps(playerarray), mimetype='application/json')

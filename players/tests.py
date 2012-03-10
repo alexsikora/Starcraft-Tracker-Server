@@ -109,3 +109,41 @@ class TeamTest(TestCase):
         self.assertTrue("Test1" not in result)
         self.assertTrue("AnotherTeam" not in result)
         self.assertTrue("TestableTeam" not in result)
+
+
+class PlayerTest(TestCase):
+    username = 'testuser'
+    password = 'testpass'
+    email = 'test@test.com'
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(self.username, self.email, self.password)
+        auth = self.getUserAuth(self.username, self.password)
+        self.extra = {
+            'HTTP_AUTHORIZATION': auth,
+        }
+
+        newTeam = Team.objects.create(name="Test1", tag="T")
+        newTeam2 = Team.objects.create(name="AnotherTeam", tag="Test")
+        newTeam3 = Team.objects.create(name="TestableTeam", tag="TT")
+
+        player1 = Player.objects.create(name = "p1", handle = "ph1", team = newTeam, race = "Terran", elo = "1500", nationality = "US")
+        player2 = Player.objects.create(name = "p2", handle = "ph2", team = newTeam2, race = "Protoss", elo = "1600", nationality = "RU")
+        player3 = Player.objects.create(name = "p3", handle = "ph3", team = newTeam3, race = "Zerg", elo = "1700", nationality = "KR")
+
+    def getUserAuth(self, username, password):
+        auth = '%s:%s' % (username, password)
+        auth = 'Basic %s' % base64.encodestring(auth)
+        auth = auth.strip()
+
+        return auth
+
+    def test_find_all_players(self):
+        response = self.client.get('/players/getall/',{}, **self.extra)
+        result = response.content
+
+        self.failUnless(result)
+        self.assertTrue("p1" in result)
+        self.assertTrue("p2" in result)
+        self.assertTrue("p3" in result)
