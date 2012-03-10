@@ -13,7 +13,7 @@ class Team(models.Model):
 class Player(models.Model):
     name = models.CharField("player's real name", max_length=255)
     handle = models.CharField("player's online handle", max_length=255)
-    team = models.ForeignKey(Team, blank=True, null=True, verbose_name="player's team", on_delete=models.SET_NULL)
+    team = models.ForeignKey(Team, blank=True, null=True, verbose_name="player's team")
     picture = models.FileField(upload_to="/player_pics/", blank=True, null=True)
     race = models.CharField("player's race", max_length=100)
     elo = models.IntegerField("player elo")
