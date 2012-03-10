@@ -53,8 +53,10 @@ def authenticate_user(request):
     response = {}
     if user is not None:
         if user.is_active:
+            response['status_code'] = 200
             response['response'] = "Successful authentication"
         else:
+            response['status_code'] = 0 #TOOD: Figure out what this should be
             response['response'] = "Your account has been disabled"
         return HttpResponse(simplejson.dumps(response),mimetype="application/json")
     else:
