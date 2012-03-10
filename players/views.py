@@ -40,6 +40,7 @@ def get_all_teams(request):
     jsonreturn = serializers.serialize("json", teams)
     teamarray = {}
     teamarray['response'] = jsonreturn
+    teamarray['status_code'] = 200
     return HttpResponse(simplejson.dumps(teamarray), mimetype='application/json')
 	
 def get_matching_teams(request):
@@ -51,6 +52,7 @@ def get_matching_teams(request):
     jsonreturn = serializers.serialize("json", teams)
     teamarray = {}
     teamarray['response'] = jsonreturn
+    teamarray['status_code'] = 200
     return HttpResponse(simplejson.dumps(teamarray), mimetype='application/json')
 
 def get_all_players(request):
@@ -60,4 +62,5 @@ def get_all_players(request):
     response = {}
     all_players = serializers.serialize("json",Player.objects.all())
     response['response'] = all_players
+    response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
