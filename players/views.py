@@ -19,3 +19,9 @@ def get_matching_teams(request):
 	teamarray = {}
 	teamarray['response'] = jsonreturn
 	return HttpResponse(simplejson.dumps(teamarray), mimetype='application/json')
+
+def get_all_players(request):
+    response = {}
+    all_players = serializers.serialize("json",Player.objects.all())
+    response['response'] = all_players
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')

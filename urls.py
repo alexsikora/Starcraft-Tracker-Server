@@ -19,4 +19,6 @@ urlpatterns = patterns('',
     url(r'^users/remove/', 'users.views.remove_user'),
 	url(r'^players/allteams/', 'players.views.get_all_teams'),
 	url(r'^players/teamquery/', 'players.views.get_matching_teams'),
+    url(r'^players/getall/', 'players.views.get_all_players'),
+    url(r'^events/getmatches/', 'events.views.get_matches_from_round'),
 )
