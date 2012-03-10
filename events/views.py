@@ -12,3 +12,10 @@ def get_matches_from_round(request):
     matches = serializers.serialize("json",Match.objects.filter(match_round__id=fkey))
     response['response'] = matches
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
+	
+def get_rounds_from_event(request):
+    fkey = request.GET['id']
+    response = {}
+    rounds = serializers.serialize("json",Round.objects.filter(event_round__id=fkey))
+    response['response'] = rounds
+    return HttpResponse(simplejson.dumps(response),mimetype='application/json')
