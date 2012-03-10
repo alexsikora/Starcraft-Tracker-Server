@@ -11,8 +11,8 @@ MANAGERS = ADMINS
 
 DB_NAME = 'trackerdb'
 
-#if 'test' in sys.argv:
-#    DB_NAME = 'test_db'
+if 'test' in sys.argv:
+    DB_NAME = 'test_db'
 
 DATABASES = {
     'default': {
