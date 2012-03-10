@@ -1,9 +1,17 @@
 # Create your views here.
 from models import Team
-from django.core import serializers
+from models import Player
 from django.http import HttpResponse
 from django.http import Http404
+from django.core import serializers
 from django.utils import simplejson
+import base64
+
+def get_all_players(request):
+    response = {}
+    all_players = serializers.serialize("json",Player.objects.all())
+    response['response'] = all_players
+    return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
 def get_all_teams(request):
 	teams = Team.objects.all()
