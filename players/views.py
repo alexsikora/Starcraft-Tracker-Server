@@ -64,3 +64,14 @@ def get_all_players(request):
     response['response'] = all_players
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
+def player_with_id(request):
+    user = is_auth(request)
+    if user is None:
+        return auth_required_response()
+    response = {}
+    ident = request.GET['id']
+    player = serializers.serialize("json",Player.objects.filter(pk=ident))
+    response['response'] = player
+    response['status_code'] = 200
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
