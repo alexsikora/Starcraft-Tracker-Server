@@ -9,3 +9,9 @@ views.py
 -The user function
 tests.py
 -The user tests
+V0.3 (Iteration 3)
+Most work in /players/
+The models file contains the team and player models
+The views.py file contains the necessary methods for the client to retrieve the players/teams
+The tests.py file contains the tests
+/events/ has inital model layout (but was not in this iteration, so not completed and not tested yet)
