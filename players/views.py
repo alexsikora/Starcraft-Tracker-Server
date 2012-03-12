@@ -70,7 +70,7 @@ def get_matching_players(request):
     if user is None:
         return auth_required_response()
     query = request.GET['query']
-    players = Player.objects.filter(name__istartswith=query) | Player.objects.filter(handle__iexact=query) | Player.objects.filter(team__iexact=query) | Player.objects.filter(race__iexact=query) | Player.objects.filter(elo__iexact=query) | Player.objects.filter(nationality__iexact=query)
+    players = Player.objects.filter(name__istartswith=query) | Player.objects.filter(handle__exact=query) | Player.objects.filter(team__exact=query) | Player.objects.filter(race__exact=query) | Player.objects.filter(elo__exact=query) | Player.objects.filter(nationality__exact=query)
     jsonreturn = serializers.serialize("json", players)
     playerarray = {}
     playerarray['response'] = jsonreturn
