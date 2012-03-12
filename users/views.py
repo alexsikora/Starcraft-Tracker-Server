@@ -47,7 +47,7 @@ def create_user(request):
     except IntegrityError:
         response['response'] = "Account creation failed"
         response['status_code'] = 0
-    return HttpResponse(simplejson.dump(response), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
 def authenticate_user(request):
     #name = request.POST['username']
@@ -72,14 +72,14 @@ def remove_user(request):
     if user is not None:
         if user.is_active:
             user.delete()
-            response[status_code] = 200
+            response['status_code'] = 200
             response["response"] = "Successful account removal"
         else:
-            response[status_code] = 0
+            response['status_code'] = 0
             response["response"] = "Your account has been disabled"
     else:
         return auth_required_response()
-    return HttpResponse(simplejson.dump(response), mimetype="application/json")
+    return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
 create_user = csrf_exempt(create_user)
 authenticate_user = csrf_exempt(authenticate_user)
