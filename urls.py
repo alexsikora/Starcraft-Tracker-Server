@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^players/allteams/', 'players.views.get_all_teams'),
     url(r'^players/teamquery/', 'players.views.get_matching_teams'),
     url(r'^players/getall/', 'players.views.get_all_players'),
+    url(r'^players/withid/', 'players.views.player_with_id'),
     url(r'^events/getmatches/', 'events.views.get_matches_from_round'),
     url(r'^players/playerquery/', 'players.views.get_matching_players'),
 )
