@@ -73,7 +73,8 @@ class UserTest(TestCase):
         
     def testRemoveDisabled(self):
         self.user = User.objects.create_user('dummy','dummy','test')
-        User.user_permissions.remove(is_active)
+        self.user.is_active = False
+        self.user.save()
         response = self.client.post('/users/remove/',{'username': 'dummy', 'password': 'test'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, "Your account has been disabled")
