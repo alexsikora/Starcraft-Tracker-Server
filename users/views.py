@@ -39,11 +39,15 @@ def auth_required_response():
 def create_user(request):
     username = request.POST['username']
     password = request.POST['password']
+    response = {}
     try:
         newUser = User.objects.create_user(username, username, password)
-        return HttpResponse("Account successfully created");
+        response['response'] = "Account successfully created"
+        response['status_code'] = 200
     except IntegrityError:
-        return HttpResponse("Account creation failed");
+        response['response'] = "Account creation failed"
+        response['status_code'] = 0
+    return HttpResponse(simplejson.dump(response), mimetype="application/json")
 
 def authenticate_user(request):
     #name = request.POST['username']
@@ -63,17 +67,19 @@ def authenticate_user(request):
         return auth_required_response()
 
 def remove_user(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
+    user = is_auth(request)
+    response = {}
     if user is not None:
         if user.is_active:
             user.delete()
-            return HttpResponse("Successful account removal")
+            response[status_code] = 200
+            response["response"] = "Successful account removal"
         else:
-            return HttpResponse("Your account has been disabled")
+            response[status_code] = 0
+            response["response"] = "Your account has been disabled"
     else:
-        return HttpResponse("Your username or password was invalid")  
+        return auth_required_response()
+    return HttpResponse(simplejson.dump(response), mimetype="application/json")
 
 create_user = csrf_exempt(create_user)
 authenticate_user = csrf_exempt(authenticate_user)
