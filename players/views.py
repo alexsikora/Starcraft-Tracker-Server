@@ -65,19 +65,6 @@ def get_all_players(request):
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
-
-def get_matching_players(request):
-    user = is_auth(request)
-    if user is None:
-        return auth_required_response()
-    query = request.GET['query']
-    players = Player.objects.filter(name__istartswith=query) | Player.objects.filter(handle__exact=query) | Player.objects.filter(team__exact=query) | Player.objects.filter(race__exact=query) | Player.objects.filter(elo__exact=query) | Player.objects.filter(nationality__exact=query)
-    jsonreturn = serializers.serialize("json", players)
-    playerarray = {}
-    playerarray['response'] = jsonreturn
-    playerarray['status_code'] = 200
-    return HttpResponse(simplejson.dumps(playerarray), mimetype='application/json')
-
 def player_with_id(request):
     user = is_auth(request)
     if user is None:

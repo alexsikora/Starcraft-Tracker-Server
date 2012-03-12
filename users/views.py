@@ -50,9 +50,6 @@ def create_user(request):
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
 def authenticate_user(request):
-    #name = request.POST['username']
-    #passw = request.POST['password']
-    #user = authenticate(username=name, password=passw)
     user = is_auth(request)
     response = {}
     if user is not None:
