@@ -37,7 +37,7 @@ def get_all_teams(request):
     if user is None:
         return auth_required_response()
     teams = Team.objects.all()
-    jsonreturn = serializers.serialize("json", teams)
+    jsonreturn = serializers.serialize("python", teams)
     teamarray = {}
     teamarray['response'] = jsonreturn
     teamarray['status_code'] = 200
@@ -49,7 +49,7 @@ def get_matching_teams(request):
         return auth_required_response()
     query = request.GET['query']
     teams = Team.objects.filter(name__istartswith=query) | Team.objects.filter(tag__iexact=query)
-    jsonreturn = serializers.serialize("json", teams)
+    jsonreturn = serializers.serialize("python", teams)
     teamarray = {}
     teamarray['response'] = jsonreturn
     teamarray['status_code'] = 200
@@ -60,7 +60,7 @@ def get_all_players(request):
     if user is None:
         return auth_required_response()
     response = {}
-    all_players = serializers.serialize("json", Player.objects.all())
+    all_players = serializers.serialize("python", Player.objects.all())
     response['response'] = all_players
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
@@ -71,7 +71,7 @@ def player_with_id(request):
         return auth_required_response()
     response = {}
     ident = request.GET['id']
-    player = serializers.serialize("json",Player.objects.filter(pk=ident))
+    player = serializers.serialize("python",Player.objects.filter(pk=ident))
     response['response'] = player
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
