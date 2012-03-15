@@ -60,7 +60,7 @@ def get_all_players(request):
     if user is None:
         return auth_required_response()
     response = {}
-    all_players = serializers.serialize("json",Player.objects.all())
+    all_players = serializers.serialize("json", Player.objects.all())
     response['response'] = all_players
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
