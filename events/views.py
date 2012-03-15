@@ -9,13 +9,13 @@ import base64
 def get_matches_from_round(request):
     fkey = request.GET['id']
     response = {}
-    matches = serializers.serialize("json",Match.objects.filter(match_round__id=fkey))
+    matches = serializers.serialize("python",Match.objects.filter(match_round__id=fkey))
     response['response'] = matches
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 	
 def get_rounds_from_event(request):
     fkey = request.GET['id']
     response = {}
-    rounds = serializers.serialize("json",Round.objects.filter(event_round__id=fkey))
+    rounds = serializers.serialize("python",Round.objects.filter(event_round__id=fkey))
     response['response'] = rounds
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
