@@ -24,7 +24,7 @@ class Event(models.Model):
         return {
             'pk': self.pk,
             'name': self.name,
-            'start_date': self.start_date.strftime("&Y-%m-%d"),
+            'start_date': self.start_date.strftime("%Y-%m-%d"),
             'end_date': self.end_date.strftime("%Y-%m-%d")
         }
 
