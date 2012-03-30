@@ -19,3 +19,19 @@ def get_rounds_from_event(request):
     rounds = serializers.serialize("python",Round.objects.filter(event_round__id=fkey))
     response['response'] = rounds
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
+
+def get_events(request):
+    response = {}
+    events = serializers.serialize("python",Event.objects.all());
+    response['response'] = events
+    response['status_code'] = 200
+    return HttpResponse(simplejson.dumps(response),mimetype='application/json')
+
+def get_event(request):
+    response = {}
+    fkey = request.GET['id']
+    event = Event.objects.get(pk=fkey)
+    response = {}
+    response['status_code'] = 200
+    response['response'] = event.export_to_dict()
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
