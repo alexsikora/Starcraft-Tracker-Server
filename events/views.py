@@ -22,8 +22,8 @@ def get_rounds_from_event(request):
 
 def get_events(request):
     response = {}
-    events = serializers.serialize("python",Event.objects.all());
-    response['response'] = events
+    events = Event.objects.all();
+    response['response'] = [event.shallow_dict() for event in events]
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
