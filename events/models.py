@@ -94,14 +94,23 @@ class Map(models.Model):
 class Game(models.Model):
     player_game_match = models.ForeignKey(PlayerMatch, verbose_name="player match this game is a part of", blank=True, null=True)
     team_game_match = models.ForeignKey(TeamMatch, verbose_name="team match this game is a part of", blank=True, null=True)
-    game_map = models.ForeignKey(Map, verbose_name="map this game is played on", blank=True, null=True)
+    game_map = models.ForeignKey(Map, verbose_name="map this game is played on", blank = True, null = True)
     description = models.CharField("short description of game", max_length=1000, blank=True, null=True)
     winner = models.ForeignKey(Player, verbose_name="winner of this game", blank=True, null=True, related_name="+")
+    game_number = models.IntegerField()
+    def __unicode__(self):
+        game_round = self.player_game_match.match_round
+        return game_round.event.name + " - " + game_round.name + " - " + game_round.first_player.name + " vs. " + game_round.second_player.name + " Game " + self.game_number
+
     def export_to_dict(self):
+        map_dict = {}
+        if (self.game_map is not None):
+            map_dict = self.game_map.export_to_dict()
+
         return {
             'pk': self.pk,
             'description': self.description,
             'winner' : self.winner.pk,
-            'map' : self.game_map.export_to_dict()
+            'map' : map_dict
         }
 
