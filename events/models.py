@@ -92,7 +92,7 @@ class Map(models.Model):
         }
     
 class Game(models.Model):
-    player_game_match = models.ForeignKey(PlayerMatch, verbose_name="player match this game is a part of", blank=True, null=True)
+    player_game_match = models.ForeignKey(PlayerMatch, verbose_name="player match this game is a part of")
     team_game_match = models.ForeignKey(TeamMatch, verbose_name="team match this game is a part of", blank=True, null=True)
     game_map = models.ForeignKey(Map, verbose_name="map this game is played on", blank = True, null = True)
     description = models.CharField("short description of game", max_length=1000, blank=True, null=True)
@@ -100,7 +100,7 @@ class Game(models.Model):
     game_number = models.IntegerField()
     def __unicode__(self):
         game_round = self.player_game_match.match_round
-        return game_round.event.name + " - " + game_round.name + " - " + game_round.first_player.name + " vs. " + game_round.second_player.name + " Game " + self.game_number
+        return game_round.event.name + " - " + game_round.name + " - " + self.player_game_match.first_player.name + " vs. " + self.player_game_match.second_player.name + " Game " + str(self.game_number)
 
     def export_to_dict(self):
         map_dict = {}

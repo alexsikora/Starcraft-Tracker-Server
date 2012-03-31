@@ -11,6 +11,9 @@ class UserProfile(models.Model):
     favorite_teams = models.ManyToManyField(Team)
     favorite_events = models.ManyToManyField(Event)
     
+    def __unicode__(self):
+        return self.user.username
+    
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user = instance)
