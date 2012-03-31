@@ -209,6 +209,16 @@ def remove_favorite_event(request):
     response["response"] = "Remove favorite event successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
+def get_favorites(request):
+    user = is_auth(request)
+    response = {}
+    if user is None:
+        return auth_required_response()
+    profile = user.get_profile()
+    response['status_code'] = 200
+    response['response'] = profile.favorites_to_dict()
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
         
 create_user = csrf_exempt(create_user)
 authenticate_user = csrf_exempt(authenticate_user)
