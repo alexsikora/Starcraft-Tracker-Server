@@ -13,9 +13,17 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return self.user.username
+
+    def favorites_to_dict(self):
+        return {
+            'favorite_players':[player.pk for player in self.favorite_players.all()],
+            'favorite_teams':[team.pk for team in self.favorite_teams.all()],
+            'favorite_events':[event.pk for event in self.favorite_events.all()]
+        }
     
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user = instance)
+
 
 post_save.connect(create_user_profile, sender=User)
