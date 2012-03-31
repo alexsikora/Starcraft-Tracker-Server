@@ -86,16 +86,17 @@ def add_favorite_player(request):
     if user is None:
         return auth_required_response()
     pid = request.GET['id']
-    player = Player.objects.get(pk=pid)
-    if player is None:
+    try:
+        player = Player.objects.get(pk=pid)
+    except Player.DoesNotExist:
         response['status_code'] = 404
         response["response"] = "Player id does not exist!"
-    else:
-        profile = user.get_profile()
-        profile.favorite_players.add(player)
-        profile.save()
-        response['status_code'] = 200
-        response["response"] = "Add favorite player successful!"
+        return HttpResponse(simplejson.dumps(response), mimetype="application/json")
+    profile = user.get_profile()
+    profile.favorite_players.add(player)
+    profile.save()
+    response['status_code'] = 200
+    response["response"] = "Add favorite player successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
         
 def add_favorite_team(request):
@@ -104,16 +105,17 @@ def add_favorite_team(request):
     if user is None:
         return auth_required_response()
     tid = request.GET['id']
-    team = Team.objects.get(pk=tid)
-    if team is None:
+    try:
+        team = Team.objects.get(pk=tid)
+    except Team.DoesNotExist:
         response['status_code'] = 404
         response["response"] = "Team id does not exist!"
-    else:
-        profile = user.get_profile()
-        profile.favorite_teams.add(team)
-        profile.save()
-        response['status_code'] = 200
-        response["response"] = "Add favorite team successful!"
+        return HttpResponse(simplejson.dumps(response), mimetype="application/json")
+    profile = user.get_profile()
+    profile.favorite_teams.add(team)
+    profile.save()
+    response['status_code'] = 200
+    response["response"] = "Add favorite team successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
     
 def add_favorite_event(request):
@@ -122,16 +124,17 @@ def add_favorite_event(request):
     if user is None:
         return auth_required_response()
     eid = request.GET['id']
-    event = Event.objects.get(pk=eid)
-    if event is None:
+    try:
+        event = Event.objects.get(pk=eid)
+    except Event.DoesNotExist:
         response['status_code'] = 404
         response["response"] = "Event id does not exist!"
-    else:
-        profile = user.get_profile()
-        profile.favorite_events.add(event)
-        profile.save()
-        response['status_code'] = 200
-        response["response"] = "Add favorite event successful!"
+        return HttpResponse(simplejson.dumps(response), mimetype="application/json")
+    profile = user.get_profile()
+    profile.favorite_events.add(event)
+    profile.save()
+    response['status_code'] = 200
+    response["response"] = "Add favorite event successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
         
 def remove_favorite_player(request):

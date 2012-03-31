@@ -150,7 +150,7 @@ class PlayerTest(TestCase):
         return auth
 
     def test_find_all_players(self):
-        response = self.client.get('/players/getall/',{}, **self.extra)
+        response = self.client.get('/players/allplayers/',{}, **self.extra)
         self.assertEqual(response.status_code, 200)
         result = response.content
 
@@ -167,7 +167,7 @@ class PlayerTest(TestCase):
         self.assertTrue("p1" in result)
 
     def test_find_all_players_unauthenticated(self):
-        response = self.client.get('/players/getall/', {})
+        response = self.client.get('/players/allplayers/', {})
         self.assertEqual(response.status_code, 401)
 
     def test_player_with_id_unauthenticated(self):
