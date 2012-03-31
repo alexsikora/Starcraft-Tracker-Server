@@ -67,7 +67,7 @@ def get_events(request):
 def get_event(request):
     user = is_auth(request)
     if user is None:
-        return auth_required_responsse()
+        return auth_required_response()
     response = {}
     fkey = request.GET['id']
     event = Event.objects.get(pk=fkey)
