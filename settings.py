@@ -8,6 +8,8 @@ ADMINS = (
     #('Your Name', 'your_email@example.com'),
 )
 
+C2DM_AUTH_TOKEN = 'DQAAAM0AAAAYmpK6qxet-j8JerXQrIMo8RYbqQYCfdJQkiyFHMsanzhCWChPK6f0N7yjdrRpAh-DrI2r20RiZwXKxPo4v3Z6Jj9hiOoGyo0GezEq7yTp7DGr0bKPBjNzKVvdxE_oGKAMMdA-IKbuCGDCh6CjVNaJaKU_GLxpiJIT_Ia66q-kTgFzrT1Mlgac67xO2fJEsfTFB5-fK54JsKiWipCe1s17ZSVtMBHKKRPO4p5dBePn00LfaUI82Nkq3ycst2Jx3NOb_d1SNkHII5bwk_omPlps'
+
 MANAGERS = ADMINS
 
 DB_NAME = 'trackerdb'
