@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.csrf.middleware import csrf_exempt
 import base64
 from django.utils import simplejson
+from django_c2dm.models import AndroidDevice
 
 def is_auth(request):
     #if (request.user is not AnonymouseUser):
@@ -222,6 +223,25 @@ def get_favorites(request):
     response['response'] = profile.favorites_to_dict()
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
+def set_device(request):
+    user = is_auth(request)
+    if user is None:
+        return auth_required_response()
+    response = {}
+    type = request.GET['type']
+    device_id = request.GET['did']
+    registration_id = request.GET['rid']
+    device = user.get_profile().device
+    if device is None:
+        user.get_profile().device = AndroidDevice.objects.create(device_id=device_id, registration_id=registration_id, collapse_key="")
+        user.get_profile().save()
+    else:
+        device.device_id = device_id
+        device.registration_id = registration_id
+        device.save()
+    response['status_code'] = 200
+    response['response'] = "Device set successful"
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
         
 create_user = csrf_exempt(create_user)
 authenticate_user = csrf_exempt(authenticate_user)

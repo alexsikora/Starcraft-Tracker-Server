@@ -31,4 +31,5 @@ urlpatterns = patterns('',
     url(r'^events/allevents/', 'events.views.get_events'),
     url(r'^events/get_event/', 'events.views.get_event'),
     url(r'^users/getallfavs/', 'users.views.get_favorites'),
+    url(r'^users/setdevice/', 'users.views.set_device'),
 )

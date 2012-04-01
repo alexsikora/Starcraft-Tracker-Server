@@ -90,9 +90,9 @@ class AndroidDevice(models.Model):
 
                 raise Exception(result[1])
         except URLError:
-            return false
+            return False
         except Exception, error:
-            return false 
+            return False 
 
     def __unicode__(self):
         return '%s' % self.device_id
