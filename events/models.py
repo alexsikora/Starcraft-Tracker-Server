@@ -14,7 +14,7 @@ class Event(models.Model):
     def export_to_dict(self):
         return {
             'pk': self.pk, 
-            'name': self.name, 
+            'name': self.name,
             'start_date': self.start_date.strftime("%Y-%m-%d"), 
             'end_date': self.end_date.strftime("%Y-%m-%d"),
             'rounds': [round.export_to_dict() for round in self.round_set.all()]
@@ -24,6 +24,7 @@ class Event(models.Model):
         return {
             'pk': self.pk,
             'name': self.name,
+            'model' : 'events.event',
             'start_date': self.start_date.strftime("%Y-%m-%d"),
             'end_date': self.end_date.strftime("%Y-%m-%d")
         }
