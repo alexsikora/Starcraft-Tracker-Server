@@ -100,7 +100,7 @@ class Game(models.Model):
     game_number = models.IntegerField()
     def __unicode__(self):
         game_round = self.player_game_match.match_round
-        return game_round.event.name + " - " + game_round.name + " - " + self.player_game_match.first_player.name + " vs. " + self.player_game_match.second_player.name + " Game " + str(self.game_number)
+        return game_round.event.name + " - " + game_round.name + " - " + self.player_game_match.first_player.handle + " vs. " + self.player_game_match.second_player.handle + " Game " + str(self.game_number)
 
     def export_to_dict(self):
         map_dict = {}
