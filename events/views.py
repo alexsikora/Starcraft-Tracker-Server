@@ -70,8 +70,12 @@ def get_event(request):
         return auth_required_response()
     response = {}
     fkey = request.GET['id']
-    event = Event.objects.get(pk=fkey)
     response = {}
-    response['status_code'] = 200
-    response['response'] = event.export_to_dict()
+    try:
+        event = Event.objects.get(pk=fkey)
+        response['status_code'] = 200
+        response['response'] = event.export_to_dict()
+    except Event.DoesNotExist:
+        response['status_code'] = 404
+        response['response'] = "Event does not exist"
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
