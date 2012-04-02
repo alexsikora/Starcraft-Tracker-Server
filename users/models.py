@@ -8,9 +8,9 @@ from django_c2dm.models import AndroidDevice
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    favorite_players = models.ManyToManyField(Player)
-    favorite_teams = models.ManyToManyField(Team)
-    favorite_events = models.ManyToManyField(Event)
+    favorite_players = models.ManyToManyField(Player, blank=True, null=True)
+    favorite_teams = models.ManyToManyField(Team, blank=True, null=True)
+    favorite_events = models.ManyToManyField(Event, blank=True, null=True)
     device = models.OneToOneField(AndroidDevice, blank=True, null=True)
     
     def __unicode__(self):

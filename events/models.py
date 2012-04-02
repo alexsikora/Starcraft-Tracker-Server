@@ -99,6 +99,8 @@ class Game(models.Model):
     description = models.CharField("short description of game", max_length=1000, blank=True, null=True)
     winner = models.ForeignKey(Player, verbose_name="winner of this game", blank=True, null=True, related_name="+")
     game_number = models.IntegerField()
+    alert_sent = models.BooleanField()
+
     def __unicode__(self):
         game_round = self.player_game_match.match_round
         return game_round.event.name + " - " + game_round.name + " - " + self.player_game_match.first_player.handle + " vs. " + self.player_game_match.second_player.handle + " Game " + str(self.game_number)
