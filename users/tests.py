@@ -169,4 +169,11 @@ class UserTest(TestCase):
         response = self.client.post('/users/getallfavs/', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 200)
+    
+    def test_set_device(self):
+        response = self.client.post('/users/setdevice/?type=A&did=1&rid=1', {}, **self.extra)
+        result = simplejson.load(StringIO(response.content))
+        self.assertEqual(result['status_code'], 200)
+        self.assertEqual(self.user.get_profile().device.device_id, "1")
+        self.assertEqual(self.user.get_profile().device.registration_id, "1")
 
