@@ -220,7 +220,7 @@ def get_favorites(request):
         return auth_required_response()
     profile = user.get_profile()
     response['status_code'] = 200
-    response['response'] = profile.favorites_to_dict()
+    response['response'] = [profile.favorites_to_dict()]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 def set_device(request):
