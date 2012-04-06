@@ -79,3 +79,4 @@ def get_event(request):
         response['status_code'] = 404
         response['response'] = "Event does not exist"
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+    
