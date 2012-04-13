@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.contrib.auth import authenticate, login
 import base64
 
+# is_auth - Authenticates a user before allowing the user to access any server functionality.
 def is_auth(request):
     #if (request.user is not AnonymouseUser):
     #    return request.user
@@ -25,6 +26,7 @@ def is_auth(request):
                         request.user = user
     return user
 
+# auth_required_repsonse - Forms a required HttpResponse if user authentication fails.
 def auth_required_response():
     response = HttpResponse()
     response.status_code = 401
@@ -32,6 +34,7 @@ def auth_required_response():
     response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
     return response
 
+# get_all_teams - Returns a JSON format HttpResponse of all teams in the database.
 def get_all_teams(request):
     user = is_auth(request)
     if user is None:
@@ -42,7 +45,9 @@ def get_all_teams(request):
     teamarray['response'] = jsonreturn
     teamarray['status_code'] = 200
     return HttpResponse(simplejson.dumps(teamarray), mimetype='application/json')
-	
+
+# get_matching_teams - Accepts a query string from the URL,
+# then returns a JSON formatted HttpResponse of all teams matching the query.	
 def get_matching_teams(request):
     user = is_auth(request)
     if user is None:
@@ -55,6 +60,7 @@ def get_matching_teams(request):
     teamarray['status_code'] = 200
     return HttpResponse(simplejson.dumps(teamarray), mimetype='application/json')
 
+# get_all_players - Returns a JSON format HttpsResponse of all players in the database.
 def get_all_players(request):
     user = is_auth(request)
     if user is None:
@@ -65,6 +71,7 @@ def get_all_players(request):
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
+# player_with_id - Returns a JSON response of a single player based on the unique private key in the database matching the desired player.
 def player_with_id(request):
     user = is_auth(request)
     if user is None:
