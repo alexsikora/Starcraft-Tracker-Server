@@ -49,6 +49,8 @@ class AndroidDevice(models.Model):
     last_messaged = models.DateTimeField(blank = True, default = datetime.datetime.now)
     failed_push = models.BooleanField(default = False)
 
+    last_result = models.CharField(max_length = 255, blank=True, null=True)
+
     def send_message(self, delay_while_idle = False, **kwargs):
         '''
         Sends a message to the device.  
@@ -82,7 +84,7 @@ class AndroidDevice(models.Model):
             response = urllib2.urlopen(request)
 
             result = response.read().split('=')
-
+            self.last_result = result
             if 'Error' in result:
                 if result[1] == 'InvalidRegistration' or result[1] == 'NotRegistered':
                     self.failed_push = True
