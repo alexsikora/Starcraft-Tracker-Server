@@ -33,7 +33,6 @@ registration_id.short_description = "Registration ID"
 
 class AndroidDeviceAdmin(admin.ModelAdmin):
     list_display = (
-        'device_id',
         registration_id,
         'collapse_key',
         'last_messaged',
