@@ -160,6 +160,6 @@ def send_alert(sender, instance, created, **kwargs):
         print alert_string
         for user in users:
             if user.device is not None:
-                user.send_message({"message": alert_string})
+                user.device.send_message(message = alert_string)
 
 post_save.connect(send_alert, sender = Game)
