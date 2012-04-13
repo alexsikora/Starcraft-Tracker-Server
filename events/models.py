@@ -139,7 +139,7 @@ class Game(models.Model):
         round = self.player_game_match.match_round
         winner = self.winner
         loser = winner
-        if winner.pk is playerOne.pk:
+        if winner.pk == playerOne.pk:
             loser = playerTwo
         else:
             loser = playerOne
