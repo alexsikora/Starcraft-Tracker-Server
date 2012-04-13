@@ -14,6 +14,7 @@ import base64
 from django.utils import simplejson
 from django_c2dm.models import AndroidDevice
 
+# is_auth - Authenticates a user before allowing the user to access any server functionality.
 def is_auth(request):
     #if (request.user is not AnonymouseUser):
     #    return request.user
@@ -32,6 +33,7 @@ def is_auth(request):
                         request.user = user
     return user
 
+# auth_required_repsonse - Forms a required HttpResponse if user authentication fails.
 def auth_required_response():
     response = HttpResponse()
     response.status_code = 401
@@ -39,6 +41,7 @@ def auth_required_response():
     response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
     return response
 
+# create_user - Creates a new User and adds User to database.
 def create_user(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -52,6 +55,7 @@ def create_user(request):
         response['status_code'] = 0
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
+# authenticate_user - Authenticates a User and allows them access to the server.
 def authenticate_user(request):
     user = is_auth(request)
     response = {}
@@ -60,12 +64,13 @@ def authenticate_user(request):
             response['status_code'] = 200
             response['response'] = "Successful authentication"
         else:
-            response['status_code'] = 0 #TOOD: Figure out what this should be
+            response['status_code'] = 401
             response['response'] = "Your account has been disabled"
         return HttpResponse(simplejson.dumps(response),mimetype="application/json")
     else:
         return auth_required_response()
 
+# remove_user - Removes an active User. If User is inactive, simply notifies User of inactivity.
 def remove_user(request):
     user = is_auth(request)
     response = {}
@@ -80,7 +85,9 @@ def remove_user(request):
     else:
         return auth_required_response()
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
-    
+
+# add_favorite_player - Adds a Player to a UserProfile's subscription list. This notifies the server
+# that the User desires updates on this Player's activity and will allow the system to notify the User.   
 def add_favorite_player(request):
     user = is_auth(request)
     response = {}
@@ -99,7 +106,9 @@ def add_favorite_player(request):
     response['status_code'] = 200
     response["response"] = "Add favorite player successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
-        
+
+# add_favorite_team - Adds a Team to a UserProfile's subscription list. This notifies the server
+# that the User desires updates on this Team's activity and will allow the system to notify the User.      
 def add_favorite_team(request):
     user = is_auth(request)
     response = {}
@@ -118,7 +127,9 @@ def add_favorite_team(request):
     response['status_code'] = 200
     response["response"] = "Add favorite team successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
-    
+
+# add_favorite_event - Adds an Event to a UserProfile's subscription list. This notifies the server
+# that the User desires updates on this Event's activity and will allow the system to notify the User.      
 def add_favorite_event(request):
     user = is_auth(request)
     response = {}
@@ -137,7 +148,9 @@ def add_favorite_event(request):
     response['status_code'] = 200
     response["response"] = "Add favorite event successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
-        
+
+# remove_favorite_player - Removes a Player from a User's subscription list. This will stop
+# the server from sending any future updates to a User about this Player, barring the User's resubscription.    
 def remove_favorite_player(request):
     user = is_auth(request)
     response = {}
@@ -162,7 +175,9 @@ def remove_favorite_player(request):
     response['status_code'] = 200
     response["response"] = "Remove favorite player successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
-        
+
+# remove_favorite_team - Removes a Team from a User's subscription list. This will stop
+# the server from sending any future updates to a User about this Team, barring the User's resubscription.     
 def remove_favorite_team(request):
     user = is_auth(request)
     response = {}
@@ -188,6 +203,8 @@ def remove_favorite_team(request):
     response["response"] = "Remove favorite team successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
+# remove_favorite_event - Removes an Event from a User's subscription list. This will stop
+# the server from sending any future updates to a User about this Event, barring the User's resubscription. 
 def remove_favorite_event(request):
     user = is_auth(request)
     response = {}
@@ -213,6 +230,7 @@ def remove_favorite_event(request):
     response["response"] = "Remove favorite event successful!"
     return HttpResponse(simplejson.dumps(response), mimetype="application/json")
 
+# get_favorites - Returns a JSON formatted HttpResponse with all of a User's favorites (Player, Team, Event).
 def get_favorites(request):
     user = is_auth(request)
     response = {}
@@ -223,6 +241,7 @@ def get_favorites(request):
     response['response'] = [profile.favorites_to_dict()]
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
+# set_device - Stores information about a User's Android Device in the database to be used when sending Push notifications.
 def set_device(request):
     user = is_auth(request)
     if user is None:
