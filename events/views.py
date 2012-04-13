@@ -7,7 +7,7 @@ from django.utils import simplejson
 from django.contrib.auth import authenticate, login
 import base64
 
-
+# is_auth - Authenticates a user before allowing the user to access any server functionality.
 def is_auth(request):
     #if (request.user is not AnonymouseUser):
     #    return request.user
@@ -26,6 +26,7 @@ def is_auth(request):
                         request.user = user
     return user
 
+# auth_required_repsonse - Forms a required HttpResponse if user authentication fails.
 def auth_required_response():
     response = HttpResponse()
     response.status_code = 401
@@ -33,7 +34,8 @@ def auth_required_response():
     response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
     return response
 
-
+# get_matches_from_round - Allows a user to search for a specific Round,
+# then returns a JSON format response of all Matches belonging to that Round.
 def get_matches_from_round(request):
     user = is_auth(request)
     if user is None:
@@ -43,7 +45,9 @@ def get_matches_from_round(request):
     matches = serializers.serialize("python",Match.objects.filter(match_round__id=fkey))
     response['response'] = matches
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
-	
+
+# get_rounds_from_event - Allows a user to search for a specific Event,
+# then returns a JSON format response of all Rounds belonging to that Event.	
 def get_rounds_from_event(request):
     user = is_auth(request)
     if user is None:
@@ -54,6 +58,7 @@ def get_rounds_from_event(request):
     response['response'] = rounds
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
+# get_events - Returns a JSON format response of all Events in the database.
 def get_events(request):
     user = is_auth(request)
     if user is None:
@@ -64,6 +69,8 @@ def get_events(request):
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
+#get_event - Allows a user to search for a specific Event by it's unique private key,
+# then returns a JSON format response of the matching Event.
 def get_event(request):
     user = is_auth(request)
     if user is None:
