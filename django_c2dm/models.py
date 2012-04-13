@@ -43,7 +43,7 @@ class AndroidDevice(models.Model):
     last_messaged - When did we last send a push to the device
     failed_push - Have we had a failure when pushing to this device? Flag it here.
     '''
-    device_id = models.CharField(max_length = 64, unique = True)
+    #device_id = models.CharField(max_length = 64, unique = True)
     registration_id = models.CharField(max_length = 140)
     collapse_key = models.CharField(max_length = 50)
     last_messaged = models.DateTimeField(blank = True, default = datetime.datetime.now)
@@ -95,7 +95,7 @@ class AndroidDevice(models.Model):
             return False 
 
     def __unicode__(self):
-        return '%s' % self.device_id
+        return '%s' % self.registration_id
 
 def send_multiple_messages(device_list, **kwargs):
     '''

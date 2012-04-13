@@ -229,14 +229,13 @@ def set_device(request):
         return auth_required_response()
     response = {}
     type = request.GET['type']
-    device_id = request.GET['did']
+    #device_id = request.GET['did']
     registration_id = request.GET['rid']
     device = user.get_profile().device
     if device is None:
-        user.get_profile().device = AndroidDevice.objects.create(device_id=device_id, registration_id=registration_id, collapse_key="")
+        user.get_profile().device = AndroidDevice.objects.create(registration_id=registration_id, collapse_key="")
         user.get_profile().save()
     else:
-        device.device_id = device_id
         device.registration_id = registration_id
         device.save()
     response['status_code'] = 200
