@@ -44,7 +44,7 @@ class AndroidDevice(models.Model):
     failed_push - Have we had a failure when pushing to this device? Flag it here.
     '''
     #device_id = models.CharField(max_length = 64, unique = True)
-    registration_id = models.CharField(max_length = 140)
+    registration_id = models.CharField(max_length = 255)
     collapse_key = models.CharField(max_length = 50)
     last_messaged = models.DateTimeField(blank = True, default = datetime.datetime.now)
     failed_push = models.BooleanField(default = False)
