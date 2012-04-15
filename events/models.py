@@ -59,7 +59,7 @@ class PlayerMatch(Match):
     second_player = models.ForeignKey(Player, verbose_name="player 2", related_name="%(class)s_secondplayer")
 
     def __unicode__(self):
-        return self.match_round.event.name + " - " + self.match_round.name + ": " + self.first_player.name + " vs. " + self.second_player.name
+        return self.match_round.event.name + " - " + self.match_round.name + ": " + self.first_player.handle + " vs. " + self.second_player.handle
     
     def export_to_dict(self):
         return {
