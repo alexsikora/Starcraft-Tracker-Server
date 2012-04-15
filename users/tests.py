@@ -111,10 +111,13 @@ class UserTest(TestCase):
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Your account has been disabled")
         
+    #Add favorites tests
     def test_add_favorite_player(self):
         response = self.client.post('/users/addfavoriteplayer/?id=1', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Add favorite player successful!")
+
+    def test_add_nonexistent_favorite_player(self):
         response = self.client.post('/users/addfavoriteplayer/?id=2', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 404)
@@ -123,6 +126,8 @@ class UserTest(TestCase):
         response = self.client.post('/users/addfavoriteteam/?id=1', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Add favorite team successful!")
+
+    def test_add_nonexistent_favorite_team(self):
         response = self.client.post('/users/addfavoriteteam/?id=2', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 404)
@@ -131,15 +136,20 @@ class UserTest(TestCase):
         response = self.client.post('/users/addfavoriteevent/?id=1', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Add favorite event successful!")
+
+    def test_add_nonexistent_favorite_event(self):
         response = self.client.post('/users/addfavoriteevent/?id=2', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 404)
 
+    #Remove favorites tests
     def test_remove_favorite_player(self):
         self.client.post('/users/addfavoriteplayer/?id=1', {}, **self.extra)
         response = self.client.post('/users/removefavoriteplayer/?id=1', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Remove favorite player successful!")
+
+    def test_remove_nonexistent_favorite_player(self):
         response = self.client.post('/users/removefavoriteplayer/?id=2', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 404)
@@ -149,6 +159,8 @@ class UserTest(TestCase):
         response = self.client.post('/users/removefavoriteteam/?id=1', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Remove favorite team successful!")
+
+    def test_remove_nonexistent_favorite_team(self):
         response = self.client.post('/users/removefavoriteteam/?id=2', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 404)
@@ -158,6 +170,8 @@ class UserTest(TestCase):
         response = self.client.post('/users/removefavoriteevent/?id=1', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Remove favorite event successful!")
+
+    def test_remove_nonexistent_favorite_event(self):
         response = self.client.post('/users/removefavoriteevent/?id=2', {}, **self.extra)
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['status_code'], 404)
