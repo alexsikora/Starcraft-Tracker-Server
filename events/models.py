@@ -110,11 +110,16 @@ class Game(models.Model):
         map_dict = {}
         if (self.game_map is not None):
             map_dict = self.game_map.export_to_dict()
-
+        winner_pk = -1
+        if self.winner is not None:
+            winner_pk = self.winner.pk
+        description = ""
+        if self.description is not None:
+            description = self.description
         return {
             'pk': self.pk,
-            'description': self.description,
-            'winner' : self.winner.pk,
+            'description': description,
+            'winner' : winner_pk,
             'map' : map_dict
         }
     
@@ -127,8 +132,10 @@ class Game(models.Model):
         users = []
         users.extend(playerOne.userprofile_set.all())
         users.extend(playerTwo.userprofile_set.all())
-        users.extend(teamOne.userprofile_set.all())
-        users.extend(teamTwo.userprofile_set.all())
+        if teamOne is not Null:
+            users.extend(teamOne.userprofile_set.all())
+        if teamTwo is not Null:
+            users.extend(teamTwo.userprofile_set.all())
         users.extend(event.userprofile_set.all())
         users = set(users)
         return users
@@ -157,7 +164,6 @@ def send_alert(sender, instance, created, **kwargs):
         firstPlayer = instance.player_game_match.first_player
         secondPlayer = instance.player_game_match.second_player
         alert_string = instance.alert_string()
-        print alert_string
         for user in users:
             if user.device is not None:
                 user.device.send_message(message = alert_string)

@@ -16,8 +16,6 @@ from django_c2dm.models import AndroidDevice
 
 # is_auth - Authenticates a user before allowing the user to access any server functionality.
 def is_auth(request):
-    #if (request.user is not AnonymouseUser):
-    #    return request.user
 
     user = None
     if 'HTTP_AUTHORIZATION' in request.META:
@@ -248,7 +246,6 @@ def set_device(request):
         return auth_required_response()
     response = {}
     type = request.GET['type']
-    #device_id = request.GET['did']
     registration_id = request.GET['rid']
     device = user.get_profile().device
     if device is None:
