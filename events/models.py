@@ -132,9 +132,9 @@ class Game(models.Model):
         users = []
         users.extend(playerOne.userprofile_set.all())
         users.extend(playerTwo.userprofile_set.all())
-        if teamOne is not Null:
+        if teamOne is not None:
             users.extend(teamOne.userprofile_set.all())
-        if teamTwo is not Null:
+        if teamTwo is not None:
             users.extend(teamTwo.userprofile_set.all())
         users.extend(event.userprofile_set.all())
         users = set(users)
