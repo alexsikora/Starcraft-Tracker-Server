@@ -4,35 +4,8 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.http import Http404
 from django.utils import simplejson
-from django.contrib.auth import authenticate, login
-import base64
+from users.models import is_auth, auth_required_response
 
-# is_auth - Authenticates a user before allowing the user to access any server functionality.
-def is_auth(request):
-    #if (request.user is not AnonymouseUser):
-    #    return request.user
-
-    user = None
-    if 'HTTP_AUTHORIZATION' in request.META:
-        auth = request.META['HTTP_AUTHORIZATION'].split()
-        if len(auth) == 2:
-            #only basic auth right now
-            if auth[0].lower() == "basic":
-                uname, passwd = base64.b64decode(auth[1]).split(':')
-                user = authenticate(username=uname, password=passwd)
-                if user is not None:
-                    if user.is_active:
-                        login(request,user)
-                        request.user = user
-    return user
-
-# auth_required_repsonse - Forms a required HttpResponse if user authentication fails.
-def auth_required_response():
-    response = HttpResponse()
-    response.status_code = 401
-    realm = ''
-    response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
-    return response
 
 # get_all_teams - Returns a JSON format HttpResponse of all teams in the database.
 def get_all_teams(request):

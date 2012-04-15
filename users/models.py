@@ -4,6 +4,9 @@ from players.models import Player, Team
 from events.models import Event
 from django.db.models.signals import post_save
 from django_c2dm.models import AndroidDevice
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+import base64
 # Create your models here.
 
 class UserProfile(models.Model):
@@ -29,3 +32,29 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 post_save.connect(create_user_profile, sender=User)
+
+
+# is_auth - Authenticates a user before allowing the user to access any server functionality.
+def is_auth(request):
+
+    user = None
+    if 'HTTP_AUTHORIZATION' in request.META:
+        auth = request.META['HTTP_AUTHORIZATION'].split()
+        if len(auth) == 2:
+            #only basic auth right now
+            if auth[0].lower() == "basic":
+                uname, passwd = base64.b64decode(auth[1]).split(':')
+                user = authenticate(username=uname, password=passwd)
+                if user is not None:
+                    if user.is_active:
+                        login(request,user)
+                        request.user = user
+    return user
+
+# auth_required_repsonse - Forms a required HttpResponse if user authentication fails.
+def auth_required_response():
+    response = HttpResponse()
+    response.status_code = 401
+    realm = ''
+    response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
+    return response

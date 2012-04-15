@@ -88,7 +88,7 @@ class UserTest(TestCase):
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], 'Your account has been disabled')
 
-    def test_authenticate_nonexistant(self):
+    def test_authenticate_nonexistent(self):
         response = self.client.post('/users/authenticate/', {}, **self.nonextra)
         self.assertEqual(response.status_code, 401)
 
@@ -98,7 +98,7 @@ class UserTest(TestCase):
         result = simplejson.load(StringIO(response.content))
         self.assertEqual(result['response'], "Successful account removal")
 
-    def test_remove_nonexistant(self):
+    def test_remove_nonexistent(self):
         response = self.client.post('/users/remove/',{}, **self.nonextra)
         self.assertEqual(response.status_code, 401)
         
