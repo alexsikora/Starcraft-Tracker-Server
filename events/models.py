@@ -153,7 +153,10 @@ class Game(models.Model):
         map = ""
         if self.game_map is not None:
             map = self.game_map.name
-        return winner.handle + " defeats " + loser.handle + " in game " + str(self.game_number) + " on " + map
+        description = ""
+        if self.description is not None:
+            description = self.description
+        return winner.handle + " defeats " + loser.handle + " in game " + str(self.game_number) + " on " + map + " summary: " + description
         
 
 def send_alert(sender, instance, created, **kwargs):
