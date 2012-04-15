@@ -46,6 +46,10 @@ class EventTest(TestCase):
         self.assertEqual(result['status_code'], 200)
         self.assertEqual(result['response'][0]['name'], 'MLG')
 
+    def test_get_events_unauthorized(self):
+        response = self.client.post('/events/allevents/', {})
+        self.assertEqual(response.status_code, 401)
+
     def test_get_event(self):
         response = self.client.post('/events/get_event/?id=1', {}, **self.extra)
         self.assertEqual(response.status_code, 200)
@@ -56,6 +60,10 @@ class EventTest(TestCase):
         self.assertEqual(result['status_code'], 200)
         self.assertEqual(result['response']['name'], 'MLG')
 
+    def test_get_event_unauthorized(self):
+        response = self.client.post('/events/get_event/?id=1', {})
+        self.assertEqual(response.status_code, 401)
+
     def test_get_nonexistent_event(self):
         response = self.client.post('/events/get_event/?id=2', {}, **self.extra)
         self.assertEqual(response.status_code, 200)
@@ -65,4 +73,5 @@ class EventTest(TestCase):
 
         self.assertEqual(result['status_code'], 404)
         self.assertEqual(result['response'], "Event does not exist")
+
 
