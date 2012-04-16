@@ -150,13 +150,15 @@ class Game(models.Model):
             loser = playerTwo
         else:
             loser = playerOne
+        prototype_string = winner.handle + " defeats " + loser.handle + " in game " + str(self.game_number)
         map = ""
         if self.game_map is not None:
             map = self.game_map.name
+            prototype_string = prototype_string + " on " + map
         description = ""
         if self.description is not None:
             description = self.description
-        return winner.handle + " defeats " + loser.handle + " in game " + str(self.game_number) + " on " + map + " summary: " + description
+        return prototype_string
         
 
 def send_alert(sender, instance, created, **kwargs):
