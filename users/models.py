@@ -7,8 +7,12 @@ from django_c2dm.models import AndroidDevice
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 import base64
-# Create your models here.
 
+# UserProfile Model
+# Links to a User.
+# Contains lists of favorite player references, favorite team references,
+#       and favorite event references.
+# Contains a reference to a user's Android device.
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     favorite_players = models.ManyToManyField(Player, blank=True, null=True)
@@ -19,6 +23,8 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
 
+    # favorites_to_dict - Returns a JSON format dictionary of the favorite lists,
+    #                       using the database's private key as the identifier.
     def favorites_to_dict(self):
         return {
             'favorite_players':[player.pk for player in self.favorite_players.all()],
@@ -26,6 +32,7 @@ class UserProfile(models.Model):
             'favorite_events':[event.pk for event in self.favorite_events.all()]
         }
         
+# create_user_profile - Creates a UserProfile in the database.
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user = instance)
