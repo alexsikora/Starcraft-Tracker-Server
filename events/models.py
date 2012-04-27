@@ -113,11 +113,15 @@ class Map(models.Model):
             'name' : self.name,
             'image' : self.image.url
         }
-# Game
-# A game is the basic unit of an event, and is contained within a match
-# It has information on the game as well as a winner. When it's updated
-# and a winner has been set, an alert is sent to all the users
-# who are interested in the class.
+
+# Game Model
+# Holds a reference to the parent match (player match or team match).
+# Holds a reference to the Map on which the Game was played.
+# Contains a short description of the match.
+# Holds a reference to the winner's private key (the players/teams will be held in the parent Match).
+# Contains an Integer value of which game this is in the series.      
+# Contains a Boolean one-way flag to determine whether or not this Game has sent an alert to
+#       relevant Android device.
 class Game(models.Model):
     player_game_match = models.ForeignKey(PlayerMatch, verbose_name="player match this game is a part of")
     team_game_match = models.ForeignKey(TeamMatch, verbose_name="team match this game is a part of", blank=True, null=True)
@@ -131,6 +135,7 @@ class Game(models.Model):
         game_round = self.player_game_match.match_round
         return game_round.event.name + " - " + game_round.name + " - " + self.player_game_match.first_player.handle + " vs. " + self.player_game_match.second_player.handle + " Game " + str(self.game_number)
 
+    # export_to_dict - Returns a JSON format dictionary of relevant information from the Game Model
     def export_to_dict(self):
         map_dict = {}
         if (self.game_map is not None):
@@ -148,6 +153,8 @@ class Game(models.Model):
             'map' : map_dict
         }
     
+    # get_relevant_players - Finds all UserProfiles that have favorited either player, either player's team,
+    #                               or the parent Event and returns a list of those UserProfiles.
     def get_relevant_players(self):
         playerOne = self.player_game_match.first_player
         playerTwo = self.player_game_match.second_player
@@ -165,6 +172,7 @@ class Game(models.Model):
         users = set(users)
         return users
     
+    # alert_string - Returns a string of relevant Game information to be sent as a Push notification.
     def alert_string(self):
         playerOne = self.player_game_match.first_player
         playerTwo = self.player_game_match.second_player
@@ -185,7 +193,7 @@ class Game(models.Model):
             description = self.description
         return prototype_string
         
-
+# send_alert - Sends an alert on Game save to all proper users' Android devices.
 def send_alert(sender, instance, created, **kwargs):
     if instance.alert_sent is False and instance.winner is not None:
         instance.alert_sent = True
