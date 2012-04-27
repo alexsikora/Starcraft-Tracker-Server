@@ -45,6 +45,24 @@ def get_events(request):
     response['status_code'] = 200
     return HttpResponse(simplejson.dumps(response),mimetype='application/json')
 
+# get_match - Returns a match that's id matches the query in JSON format, for alert usage
+def get_match(request):
+    user = is_auth(request):
+    if user is None:
+        return auth_required_response()
+
+    response = {}
+    ident = request.GET['id']
+    try:
+        match = PlayerMatch.objects.get(pk=ident)
+        response['status_code'] = 200
+        response['response'] = match.export_to_dict()
+    except PlayerMatch.DoesNotExist:
+        response['status_code'] = 404
+        response['response'] = "Player Match does not exist"
+    
+    return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+
 #get_event - Allows a user to search for a specific Event by it's unique private key,
 # then returns a JSON format response of the matching Event.
 def get_event(request):

@@ -197,6 +197,9 @@ class Game(models.Model):
 def send_alert(sender, instance, created, **kwargs):
     if instance.alert_sent is False and instance.winner is not None:
         instance.alert_sent = True
+        pmatch = instance.player_game_match
+        round = pmatch.match_round
+        event = round.event
         instance.save()
         users = instance.get_relevant_players()
         firstPlayer = instance.player_game_match.first_player
@@ -204,6 +207,7 @@ def send_alert(sender, instance, created, **kwargs):
         alert_string = instance.alert_string()
         for user in users:
             if user.device is not None:
-                user.device.send_message(message = alert_string)
+                user.device.collapse_key = str(event.pk) + str(round.pk) + str(pmatch.pk) + str(instance.pk)
+                user.device.send_message(message = alert_string, match_id = instant.player_game_match.pk)
 
 post_save.connect(send_alert, sender = Game)
