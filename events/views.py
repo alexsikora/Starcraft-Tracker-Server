@@ -47,7 +47,7 @@ def get_events(request):
 
 # get_match - Returns a match that's id matches the query in JSON format, for alert usage
 def get_match(request):
-    user = is_auth(request):
+    user = is_auth(request)
     if user is None:
         return auth_required_response()
 
