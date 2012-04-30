@@ -56,7 +56,7 @@ def get_match(request):
     try:
         match = PlayerMatch.objects.get(pk=ident)
         response['status_code'] = 200
-        response['response'] = match.export_to_dict()
+        response['response'] = [match.export_to_dict()]
     except PlayerMatch.DoesNotExist:
         response['status_code'] = 404
         response['response'] = "Player Match does not exist"
