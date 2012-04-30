@@ -208,6 +208,6 @@ def send_alert(sender, instance, created, **kwargs):
         for user in users:
             if user.device is not None:
                 user.device.collapse_key = str(event.pk) + str(round.pk) + str(pmatch.pk) + str(instance.pk)
-                user.device.send_message(message = alert_string, match_id = instant.player_game_match.pk)
+                user.device.send_message(message = alert_string, match_id = instance.player_game_match.pk)
 
 post_save.connect(send_alert, sender = Game)
